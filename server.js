@@ -23,8 +23,27 @@ const Pokemon = mongoose.model('pokemon', new mongoose.Schema(
     }
 ));
 
+
+
 app.get('/api/pokemon', async(req, res) => {
-    const pokemon =await Pokemon.find();
+    const pokemon = await Pokemon.find();
     res.send(pokemon);
-    console.log("Fetched All Pokemon!");
+    console.log("Fetched All Pokemon!")
+});
+
+app.post('/api/pokemon', async (req, res) => {
+    const pokemon = new Pokemon(req.body);
+    await pokemon.save();
+    res.send(pokemon); console.log("Added new Pokemon", pokemon);
+})
+
+
+app.delete('/api/pokemon/:id', async(res, req) => {
+    await Pokemon.findByIdAndDelete(req.params.id);
+    res.status(204).send;
+});
+
+app.put('/api/pokemon/:id', async(req, res) => {
+    const updatePokemon = await Pokemon.findByIdAndUpdate(req.params.id, req.body, {new: true});
+    res.send(updatePokemon);
 })
